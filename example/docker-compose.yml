@@ -1,0 +1,51 @@
+version: "2.3"
+
+services:
+
+  # ROS Master
+  ros-master:
+    image: ros:noetic-ros-core
+    restart: on-failure
+    tty: true        # docker run -t
+    command: stdbuf -o L roscore
+    
+  # ROS Melodic Rplidar
+  rplidar:
+    image: husarion/rplidar:latest
+    restart: unless-stopped
+    environment:
+      - "ROS_MASTER_URI=http://192.168.1.178:11311"
+    devices:
+      - /dev/ttyUSB0
+    tty: true      
+    command: roslaunch rplidar_ros rplidar_a3.launch # For Rosbot 2.0 PRO use roslaunch rplidar_ros rplidar_a3.launch
+
+  # ROS Noetic + ROS 2 Foxy
+  bridge:
+    image: ros:foxy-ros1-bridge
+    restart: on-failure
+    environment:
+      - "ROS_MASTER_URI=http://192.168.1.178:11311"
+      - "ROS_DOMAIN_ID=0"
+    command: ros2 run ros1_bridge dynamic_bridge
+
+  # ROS Foxy navigation
+  nav2:
+    image: husarion/nav2:foxy
+    tty: true
+    restart: on-failure
+    environment:
+      - "ROS_DOMAIN_ID=0"
+    command: ros2 launch husarion_nav2 bringup_both.launch.py
+
+  # ROS Foxy Rviz2 VNC
+  rviz2:
+    image: husarion/ros2-desktop-vnc:latest
+    restart: on-failure
+    enviroment:
+      - "ROS_DOMAIN_ID=0"
+    volumes:
+      - ./rosbot_pro.rviz:/root/.rviz2/default.rviz
+    ports: 
+      - 6080:80
+    shm_size: '512m'
