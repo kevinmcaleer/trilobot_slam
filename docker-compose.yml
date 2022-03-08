@@ -9,6 +9,8 @@ services:
     environment:
       - "ROS_IP=192.168.1.178"
       - "ROS_MASTER_URI=http://192.168.1.178:11311"    
+    ports:
+      - 11311:11311
     command: stdbuf -o L roscore
 
 
@@ -36,4 +38,6 @@ services:
      - "ROS_MASTER_URI=http://192.168.1.178:11311"
     devices:
       - /dev/ttyUSB0
+    ports:
+      - 11311:11311
     command: roslaunch rplidar_ros rplidar.launch # For Rosbot 2.0 PRO use roslaunch rplidar_ros rplidar_a3.launch
