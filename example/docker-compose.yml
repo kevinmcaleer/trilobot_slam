@@ -42,7 +42,7 @@ services:
   rviz2:
     image: husarion/ros2-desktop-vnc:latest
     restart: on-failure
-    enviroment:
+    environment:
       - "ROS_DOMAIN_ID=0"
     volumes:
       - ./rosbot_pro.rviz:/root/.rviz2/default.rviz
