@@ -8,6 +8,8 @@ services:
     restart: on-failure
     tty: true        # docker run -t
     command: stdbuf -o L roscore
+    network_mode: "host"
+
     
   # ROS Melodic Rplidar
   rplidar:
@@ -19,6 +21,7 @@ services:
       - /dev/ttyUSB0
     tty: true      
     command: roslaunch rplidar_ros rplidar_a3.launch # For Rosbot 2.0 PRO use roslaunch rplidar_ros rplidar_a3.launch
+    network_mode: "host"
 
   # ROS Noetic + ROS 2 Foxy
   bridge:
@@ -28,6 +31,7 @@ services:
       - "ROS_MASTER_URI=http://192.168.1.178:11311"
       - "ROS_DOMAIN_ID=0"
     command: ros2 run ros1_bridge dynamic_bridge
+    network_mode: "host"
 
   # # ROS Foxy navigation
   # nav2:
@@ -46,6 +50,7 @@ services:
       - "ROS_DOMAIN_ID=0"
     volumes:
       - ./rosbot_pro.rviz:/root/.rviz2/default.rviz
-    ports: 
-      - 6080:80
+    # ports: 
+    #   - 6080:80
     shm_size: '512m'
+    network_mode: "host"
