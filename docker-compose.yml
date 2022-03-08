@@ -11,6 +11,7 @@ services:
       - "ROS_MASTER_URI=http://0.0.0.0:11311/"    
     ports:
       - 11311:11311
+    network_mode: "host"
     command: stdbuf -o L roscore
 
 
@@ -38,4 +39,5 @@ services:
      - "ROS_MASTER_URI=http://0.0.0.0:11311/"
     devices:
       - /dev/ttyUSB0
+    network_mode: "host"
     command: roslaunch rplidar_ros rplidar.launch # For Rosbot 2.0 PRO use roslaunch rplidar_ros rplidar_a3.launch
